@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.conf import settings
 
 # Controls for Interacting with 'Published' Post
 class PublishedManager(models.Manager):
@@ -39,3 +40,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+# Django Model to Extend User Profiles
+# Contains Birthday, Photos
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date_of_birth = models.DateField(blank=True, null=True)
+    photo = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
+    
+    def __str__(self):
+        return f'Profile of {self.user.username}'
